@@ -5,7 +5,7 @@ read -p "Remote host IP/FQDN: " DYNIPT_HOST
 
 # System requirements
 sudo apt update
-sudo apt install -y python3 python3-venv sshuttle git
+sudo apt install -y python3 python3-venv git
 
 # User creation
 sudo useradd -d $DIR -s /usr/sbin/nologin dynipt
@@ -18,7 +18,7 @@ sudo chown -R dynipt: $DIR
 sudo -u dynipt mkdir $DIR/.ssh
 sudo chmod 700 $DIR/.ssh
 sudo -u dynipt ssh-keygen -a 100 -t rsa -N "" -C "sshuttle_key" -f $DIR/.ssh/id_rsa
-ssh-copy-id -i $DIR/.ssh/id_rsa.pub dynipt@$DYNIPT_HOST
+sudo -u dynipt ssh-copy-id -i $DIR/.ssh/id_rsa.pub dynipt@$DYNIPT_HOST
 
 # SystemD configuration
 sudo cp $DIR/snippets/systemd.service /etc/systemd/system/dynipt-client.service
@@ -30,11 +30,7 @@ sudo -u dynipt python3 -m venv .venv
 sudo -u dynipt .venv/bin/python -m pip install -r requirements.txt
 
 # DynIPt config
-cat <<EOF > $DIR/config.json
-{
-    "$DYNIPT_HOST": ["0.0.0.0/0"]
-}
-EOF
+sudo -u dynipt sh -c "echo '{\"$DYNIPT_HOST\": [\"0.0.0.0/0\"]}' > $DIR/config.json"
 
 # Client start
 $DIR/.venv/bin/python $DIR/main.py start
