@@ -1,1 +1,1 @@
-sshuttle
+sshuttle>=1.1.1
