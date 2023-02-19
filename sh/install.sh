@@ -19,13 +19,21 @@ sudo chmod 700 $DIR/.ssh
 sudo -u dynipt ssh-keygen -a 100 -t rsa -N "" -C "sshuttle_key" -f $DIR/.ssh/id_rsa
 
 # SystemD configuration
-sudo cp $DIR/snippets/dynipt-client.service /etc/systemd/system/dynipt-client.service
+sudo cp $DIR/snippets/systemd.service /etc/systemd/system/dynipt-client.service
 sudo systemctl daemon-reload
 
 # Python requirements
 cd $DIR
 sudo -u dynipt python3 -m venv .venv
 sudo -u dynipt .venv/bin/python -m pip install -r requirements.txt
+
+# DynIPt config
+read -p "Remote host IP/FQDN: " DYNIPT_HOST
+cat <<EOF > $DIR/config.json
+{
+    "$DYNIPT_HOST": ["0.0.0.0/0"]
+}
+EOF
 
 # Client start
 sh/service.sh start
