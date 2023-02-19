@@ -1,5 +1,3 @@
-#!/bin/python3
-
 import os
 import sys
 import json
@@ -18,8 +16,9 @@ formatter = logging.Formatter('%(module)s.%(funcName)s: %(message)s')
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-conf = "/opt/dynipt-client/config.json"
-ssh_user = "dynipt"  ## username thats used for SSH connection
+home = os.path.abspath(os.path.dirname(__file__))
+conf = f"{home}/config.json"
+ssh_user = "dynipt"
 
 def precheck():
     if len(sys.argv) < 2:
@@ -50,6 +49,7 @@ def start():
         data = json.load(jsondata)
     
     for rhost in data.keys():
+        xhost = socket.gethostbyname(rhost.split(":")[0])
         netrange = ""
 
         # if single network, turn into List
@@ -66,19 +66,13 @@ def start():
             else:
                 netrange = netrange + " " + socket.gethostbyname(network)
         netrange = netrange.strip()
-        xhost = socket.gethostbyname(rhost.split(":")[0])
         
         # build rpath
-        rpath = "-r {0}@{1} -x {2} {3} --ssh-cmd 'ssh -i /opt/dynipt-client/.ssh/id_rsa -o ServerAliveInterval=60' --no-latency-control".format(
-            ssh_user,
-            rhost,
-            xhost,
-            netrange,
-        )
+        rpath = f"-r {ssh_user}@{rhost} -x {xhost} {netrange} --ssh-cmd 'ssh -i {home}/.ssh/id_rsa -o ServerAliveInterval=60' --no-latency-control"
         try:
             print("starting dynipt client..")
             log.info("starting dynipt client for networks: %s via %s" % (netrange, rhost))
-            subprocess.Popen("sshuttle {}".format(rpath), shell=True) 
+            subprocess.Popen(f"{home}/.venv/bin/sshuttle {rpath}", shell=True)
         except CalledProcessError as err:
             log.error("error running dynipt client: %s" % str(err))
         
@@ -86,7 +80,7 @@ def start():
         time.sleep(3)
 
 def get_pid():
-    search = "ps -ef | grep '/usr/bin/python /usr/share/sshuttle/main.py /usr/bin/python -r' | grep -v grep | awk {'print $2'}"    
+    search = "ps -ef | grep '%s/.venv/bin/python .venv/bin/sshuttle -r' | grep -v grep | awk {'print $2'}" % home
     pids = []
     for line in os.popen(search):
         fields = line.split()
