@@ -1,0 +1,14 @@
+[Unit]
+Description=DynIPt client
+After=network.target
+
+[Service]
+User=dynipt
+Restart=always
+Type=forking
+WorkingDirectory=/opt/dynipt-client
+ExecStart=/opt/dynipt-client/sshuttle.py start
+ExecStop=/opt/dynipt-client/sshuttle.py stop 
+
+[Install]
+WantedBy=multi-user.target
