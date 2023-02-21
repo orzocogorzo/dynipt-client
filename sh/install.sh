@@ -34,7 +34,7 @@ echo
 echo "Configuring ssh DynIPt credentials..."
 sudo -u dynipt mkdir -p $DIR/.ssh
 sudo -u dynipt chmod 700 $DIR/.ssh
-sudo -u dynipt test ! -f $DIR/.ssh/id_rsa && sudo -u dynipt ssh-keygen -a 100 -t rsa -N "" -C "sshuttle_key" -f $DIR/.ssh/id_rsa > /dev/null
+sudo -u dynipt test ! -f $DIR/.ssh/id_rsa && sudo -u dynipt ssh-keygen -a 100 -t rsa -N "" -C "dynipt_key" -f $DIR/.ssh/id_rsa > /dev/null
 sudo -u dynipt ssh-copy-id -o StrictHostKeyChecking=no -i $DIR/.ssh/id_rsa.pub $DYNIPT_USR@$DYNIPT_HOST > /dev/null 2>&1
 echo "DynIPt ssh credentials createds"
 echo
