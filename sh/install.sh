@@ -2,13 +2,16 @@
 
 DIR=/opt/dynipt-client
 read -p "Remote host IP/FQDN: " DYNIPT_HOST
+read -p "DynIPt user password: ", DYNIPT_PWD
+echo "DYNIPT_PWD=$DYNIPT_PWD" > $DIR/.env
 
 # System requirements
 sudo apt update
-sudo apt install -y python3 python3-venv git
+sudo apt install -y python3 python3-venv git iptables
 
 # User creation
 sudo useradd -d $DIR -s /usr/sbin/nologin dynipt
+sudo usermod -aG sudo dynipt
 
 # Package download
 sudo git clone https://github.com/orzocogorzo/dynipt-client.git $DIR
@@ -33,7 +36,7 @@ sudo -u dynipt .venv/bin/python -m pip install -r requirements.txt
 sudo -u dynipt sh -c "echo '{\"$DYNIPT_HOST\": [\"0.0.0.0/0\"]}' > $DIR/config.json"
 
 # Client start
-$DIR/.venv/bin/python $DIR/main.py start
+systemctl start dynipt-client.service
 
 echo "DynIPt client is running"
 echo "Your public IP is: $(curl ip.yunohost.org)"

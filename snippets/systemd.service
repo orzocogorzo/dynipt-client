@@ -7,8 +7,8 @@ User=dynipt
 Restart=always
 Type=forking
 WorkingDirectory=/opt/dynipt-client
-ExecStart=/opt/dynipt-client/sshuttle.py start
-ExecStop=/opt/dynipt-client/sshuttle.py stop 
+ExecStart=/opt/dynipt-client/sh/dynipt-client.sh start
+ExecStop=/opt/dynipt-client/sh/dynipt-client.sh stop
 
 [Install]
 WantedBy=multi-user.target
