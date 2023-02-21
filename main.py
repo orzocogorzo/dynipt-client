@@ -23,7 +23,7 @@ log.addHandler(handler)
 home = os.path.abspath(os.path.dirname(__file__))
 binary_path = os.path.join(home, ".venv/bin/sshuttle")
 conf = f"{home}/config.json"
-ssh_user = "dynipt"
+ssh_user = os.getenv("DYNIPT_USR", "dynipt")
 
 def run():
     with open(conf) as jsondata:
@@ -63,7 +63,7 @@ def run():
                     xhost,
                     *netrange.split(" "),
                     "--ssh-cmd",
-                    f"'ssh -i {home}/.ssh/id_rsa -o ServerAliveInterval=60'",
+                    f"'ssh -o StrictHostKeyChecking=no -i {home}/.ssh/id_rsa -o ServerAliveInterval=60'",
                     "--no-latency-control"
                 ]),
                 stdin=subprocess.PIPE,
