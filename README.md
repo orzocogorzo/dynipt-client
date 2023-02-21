@@ -27,7 +27,7 @@ If do you want to read more about it, look [this docs about how it works](https:
 To install **DynIPt client** on your local machine run:
 
 ```bash
-curl https://raw.githubusercontent.com/orzocogorzo/dynipt-client/main/sh/install.sh > dynipt-install && bash ./dynipt-install
+curl -s https://raw.githubusercontent.com/orzocogorzo/dynipt-client/main/sh/install.sh > dynipt-install && bash ./dynipt-install
 ```
 
 ### On your VPS
@@ -42,16 +42,19 @@ If you need some customization on your installation, or you want to install **Dy
 into a non-debian based OS, follow the next steps and modify
 
 #### System requirements
+
 ```bash
 apt update && apt install -y python3 python3-venv git iptables curl
 ```
 
 #### Package download
+
 ```bash
 git clone https://github.com/orzocogorzo/dynipt-client.git /opt/dynipt-client
 ```
 
 #### User creation
+
 ```bash
 useradd -d /opt/dynipt-client -s /usr/sbin/nologin dynipt
 usermod -aG sudo dynipt > /dev/null
@@ -60,6 +63,7 @@ passwd dynipt
 ```
 
 #### SSH credentials
+
 ```bash
 mkdir -p /opt/dynipt-client/.ssh
 chmod 700 /opt/dynipt-client/.ssh
@@ -68,6 +72,7 @@ ssh-copy-id -i /opt/dynipt-client/.ssh/id_rsa.pub {ruser}@{rhost}
 ```
 
 #### Python requirements
+
 ```bash
 python3 -m venv /opt/dynipt-client/.venv
 /opt/dynipt-client/.venv/bin/python -m pip install -r requirements.txt
