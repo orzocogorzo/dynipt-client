@@ -3,6 +3,8 @@
 Proxy your LAN networks with [sshuttle](https://github.com/sshuttle/sshuttle)
 through a remote hosts to achive static IP exposures.
 
+_* Based on the work made by [perfecto25](https://gist.github.com/perfecto25) on this [gist](https://gist.github.com/perfecto25/6e9a0c982fb76401f720b661f1a8a9f1)._
+
 ## Description
 
 Tiny solution to setup a VPS as a proxy to your local network. It acts as a
